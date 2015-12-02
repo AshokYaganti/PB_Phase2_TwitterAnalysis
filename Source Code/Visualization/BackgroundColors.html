@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>More Tweets on a Date in United States</title>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
+<body>
+
+<table>
+	<tr>
+	<td><font size="4" color="blue">Top 8 Background Image colors</font> </td>
+	<td></td><td></td><td width="700"></td><td><a href="Home.html"><img src="images/home.png" width="100" height="100"></a>
+	</tr>
+	
+		
+	</table>  
+	
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 950,
+    height = 450,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scale.ordinal()
+    .range(["39EDE4", "#C34A2C", "#493D26", "#642D8B", "#ACDED6", "#0099B9", "#FF6699","#ED3942","#ABB8C2"]);
+
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.Count; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+d3.csv("query4.csv", function(error, data) {
+
+  data.forEach(function(d) {
+    d.Count = +d.Count;
+  });
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.ColorCode); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.ColorCode; });
+
+});
+
+</script>
